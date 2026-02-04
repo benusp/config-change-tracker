@@ -6,6 +6,7 @@ import com.example.config_change_tracker.domain.RuleType;
 import com.example.config_change_tracker.dto.CreateConfigChangeRequest;
 import com.example.config_change_tracker.notification.CriticalChangeNotifier;
 import com.example.config_change_tracker.repository.InMemoryConfigChangeRepository;
+import com.example.config_change_tracker.validation.ConfigChangeValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -17,12 +18,14 @@ public class ConfigChangeServiceTest {
     private InMemoryConfigChangeRepository repository;
     private CriticalChangeNotifier notifier;
     private ConfigChangeService service;
+    private ConfigChangeValidator validator;
 
     @BeforeEach
     void setUp() {
         repository = new InMemoryConfigChangeRepository();
         notifier = mock(CriticalChangeNotifier.class);
-        service = new ConfigChangeService(repository, notifier);
+        validator = mock(ConfigChangeValidator.class);
+        service = new ConfigChangeService(repository, notifier, validator);
     }
 
     @Test

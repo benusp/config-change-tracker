@@ -80,6 +80,26 @@ class ConfigChangeControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void createChange_invalidChangeType_returnsBadRequest() throws Exception {
+        String invalidJson = """
+            {
+                "ruleType": "CREDIT_LIMIT",
+                "changeType": "INVALID_TYPE",
+                "changedBy": "user",
+                "critical": true,
+                "before": null,
+                "after": "limit=2000",
+                "changedBy": "system-admin"
+            }
+            """;
+
+        mockMvc.perform(post("/config-change")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidJson))
+                .andExpect(status().isBadRequest());
+    }
+
     // ---------- GET BY ID ----------
 
     @Test

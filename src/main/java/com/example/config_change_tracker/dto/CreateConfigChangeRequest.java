@@ -2,11 +2,9 @@ package com.example.config_change_tracker.dto;
 
 import com.example.config_change_tracker.domain.ChangeType;
 import com.example.config_change_tracker.domain.RuleType;
-import com.example.config_change_tracker.validation.ValidChangePayload;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-@ValidChangePayload
 public class CreateConfigChangeRequest {
 
     @NotNull
