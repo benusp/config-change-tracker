@@ -141,7 +141,7 @@ Integration tests use `MockMvc` to exercise the full Spring MVC stack without st
 ## Technology Stack
 
 - Java 21
-- Spring Boot 3.x
+- Spring Boot 3.5.10
 - Spring Web
 - Bean Validation (Jakarta Validation)
 - JUnit 5
@@ -161,12 +161,20 @@ The application will start on the default port `8080`.
 
 ---
 
-## Notes
+### Insomnia tests
 
-This project is intentionally kept small and focused to demonstrate:
-- clean API design
-- explicit assumptions
-- validation logic
-- testability
-- clear separation of responsibilities
+The `api-tests` folder contains a simple Insomnia collection for manual testing of the API.
+The collection includes the following requests:
+
+1. **Create config change**  
+   Creates a new config change and stores its `id` into the `changeId` environment variable.
+
+2. **Get config change by ID**  
+   Retrieves a config change using the `changeId` variable from the previous request.
+
+3. **List config changes**  
+   Retrieves all config changes from the in-memory storage.
+
+4. **List config changes with filters**  
+   Retrieves config changes filtered by `ruleType` and `changeType`.
 

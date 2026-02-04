@@ -1,0 +1,80 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-02-04T18:30:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023",
+  "resources": [
+    {
+      "_id": "wrk_config_change",
+      "_type": "workspace",
+      "name": "Config Change Tracker",
+      "description": "Manual API tests for Config Change Tracker service"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_config_change",
+      "name": "Base Environment",
+      "data": {
+        "baseUrl": "http://localhost:8080"
+      }
+    },
+
+    {
+      "_id": "req_create",
+      "_type": "request",
+      "parentId": "wrk_config_change",
+      "name": "Create config change",
+      "method": "POST",
+      "url": "{{ baseUrl }}/config-change",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"ruleType\": \"CREDIT_LIMIT\",\n  \"changeType\": \"UPDATE\",\n  \"before\": \"limit=1000\",\n  \"after\": \"limit=2000\",\n  \"changedBy\": \"system-admin\",\n  \"critical\": true\n}"
+      }
+    },
+    {
+      "_id": "test_create",
+      "_type": "unit_test",
+      "parentId": "req_create",
+      "name": "Create – status and body",
+      "code": "const body = JSON.parse(response.body);\n\nexpect(response.status).to.equal(201);\nexpect(body).to.have.property('id');\nexpect(body.ruleType).to.equal('CREDIT_LIMIT');\nexpect(body.critical).to.equal(true);"
+    },
+
+    {
+      "_id": "req_get_by_id",
+      "_type": "request",
+      "parentId": "wrk_config_change",
+      "name": "Get config change by ID",
+      "method": "GET",
+      "url": "{{ baseUrl }}/config-change/{{ changeId }}",
+      "headers": []
+    },
+    {
+      "_id": "test_get_by_id",
+      "_type": "unit_test",
+      "parentId": "req_get_by_id",
+      "name": "Get by ID – status",
+      "code": "expect(response.status).to.equal(200);"
+    },
+
+    {
+      "_id": "req_list",
+      "_type": "request",
+      "parentId": "wrk_config_change",
+      "name": "List config changes",
+      "method": "GET",
+      "url": "{{ baseUrl }}/config-change",
+      "headers": []
+    },
+    {
+      "_id": "test_list",
+      "_type": "unit_test",
+      "parentId": "req_list",
+      "name": "List – array response",
+      "code": "const body = JSON.parse(response.body);\n\nexpect(response.status).to.equal(200);\nexpect(body).to.be.an('array');"
+    }
+  ]
+}
