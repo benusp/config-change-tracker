@@ -1,6 +1,8 @@
 package com.example.config_change_tracker.service;
 
+import com.example.config_change_tracker.domain.ChangeType;
 import com.example.config_change_tracker.domain.ConfigChange;
+import com.example.config_change_tracker.domain.RuleType;
 import com.example.config_change_tracker.dto.CreateConfigChangeRequest;
 import com.example.config_change_tracker.notification.CriticalChangeNotifier;
 import com.example.config_change_tracker.repository.InMemoryConfigChangeRepository;
@@ -10,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -56,6 +60,24 @@ public class ConfigChangeService {
         }
 
 
-        return change;
+        return saved;
+    }
+
+    public Optional<ConfigChange> getChangeById(UUID id) {
+        return repository.findById(id);
+    }
+
+    public List<ConfigChange> listChanges(
+            RuleType ruleType,
+            ChangeType changeType,
+            Instant from,
+            Instant to
+    ) {
+        return repository.findAll().stream()
+                .filter(c -> ruleType == null || c.ruleType() == ruleType)
+                .filter(c -> changeType == null || c.changeType() == changeType)
+                .filter(c -> from == null || !c.timestamp().isBefore(from))
+                .filter(c -> to == null || !c.timestamp().isAfter(to))
+                .toList();
     }
 }

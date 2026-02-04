@@ -4,7 +4,6 @@ import com.example.config_change_tracker.domain.ChangeType;
 import com.example.config_change_tracker.domain.ConfigChange;
 import com.example.config_change_tracker.domain.RuleType;
 import com.example.config_change_tracker.dto.CreateConfigChangeRequest;
-import com.example.config_change_tracker.repository.InMemoryConfigChangeRepository;
 import com.example.config_change_tracker.service.ConfigChangeService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,11 +19,9 @@ import java.util.UUID;
 @RequestMapping("/config-change")
 public class ConfigChangeController {
     private final ConfigChangeService service;
-    private final InMemoryConfigChangeRepository repository;
 
-    public ConfigChangeController(ConfigChangeService service, InMemoryConfigChangeRepository repository) {
+    public ConfigChangeController(ConfigChangeService service) {
         this.service = service;
-        this.repository = repository;
     }
 
     @PostMapping
@@ -37,7 +34,7 @@ public class ConfigChangeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ConfigChange> getById(@PathVariable UUID id) {
-        return repository.findById(id)
+        return service.getChangeById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -53,11 +50,6 @@ public class ConfigChangeController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             Instant to
     ) {
-        return repository.findAll().stream()
-                .filter(c -> ruleType == null || c.ruleType() == ruleType)
-                .filter(c -> changeType == null || c.changeType() == changeType)
-                .filter(c -> from == null || !c.timestamp().isBefore(from))
-                .filter(c -> to == null || !c.timestamp().isAfter(to))
-                .toList();
+        return service.listChanges(ruleType, changeType, from, to);
     }
 }
