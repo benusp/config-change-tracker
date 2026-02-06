@@ -131,7 +131,7 @@ Provides a basic health check endpoint.
 ## Metrics
 
 Application metrics are available via Spring Boot Actuator:
-```declarative
+```
 GET /actuator/metrics
 GET /actuator/metrics/http.server.requests
 GET /actuator/metrics/jvm.memory.used
@@ -182,13 +182,16 @@ The application will start on the default port `8080`.
 
 ---
 
-### Insomnia tests
+### .http tests
 
-The `api-tests` folder contains a simple Insomnia collection for manual testing of the API.
+The `api-tests` folder contains `.http` files for manual testing of the API.
+These tests can be executed using IntelliJ IDEA HTTP Client.  
+Some requests use variables (e.g., `changeId`) that are automatically set from responses.
+
 The collection includes the following requests:
 
 1. **Create config change**  
-   Creates a new config change and stores its `id` into the `changeId` environment variable.
+   Creates a new config change and stores its `id` into the `changeId` variable.
 
 2. **Get config change by ID**  
    Retrieves a config change using the `changeId` variable from the previous request.
@@ -198,4 +201,13 @@ The collection includes the following requests:
 
 4. **List config changes with filters**  
    Retrieves config changes filtered by `ruleType` and `changeType`.
+
+5. **List config changes with filters by time**  
+   Retrieves config changes created after a specific timestamp (`from`) and/or before (`to`).
+
+6. **Health endpoint**  
+   Checks the application health.
+
+7. **Metrics endpoint**  
+   Exposes application metrics (bonus feature).
 
