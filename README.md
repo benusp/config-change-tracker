@@ -110,6 +110,15 @@ All configuration changes are stored **in memory**.
 
 ---
 
+## Retry Logic
+Critical change notifications include automatic retry with exponential backoff:
+- Up to 3 attempts
+- Initial delay: 100ms
+- Backoff multiplier: 2x
+- Graceful degradation with recovery logging
+
+---
+
 ## Health Check
 ```
 GET /actuator/health
@@ -117,6 +126,18 @@ GET /actuator/health
 
 
 Provides a basic health check endpoint.
+
+---
+## Metrics
+
+Application metrics are available via Spring Boot Actuator:
+```declarative
+GET /actuator/metrics
+GET /actuator/metrics/http.server.requests
+GET /actuator/metrics/jvm.memory.used
+```
+
+Metrics include JVM stats, HTTP request stats, and system metrics.
 
 ---
 
