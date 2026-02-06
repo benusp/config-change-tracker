@@ -1,0 +1,38 @@
+@baseUrl = http://localhost:8080
+
+### Create config change
+POST {{baseUrl}}/config-change
+Content-Type: application/json
+
+{
+  "ruleType": "CREDIT_LIMIT",
+  "changeType": "UPDATE",
+  "before": "limit=1000",
+  "after": "limit=2000",
+  "changedBy": "system-admin",
+  "critical": true
+}
+
+> {%
+  client.global.set("changeId", response.body.id);
+%}
+
+### Get config change by ID
+GET {{baseUrl}}/config-change/{{changeId}}
+
+
+### List all config changes
+GET {{baseUrl}}/config-change
+
+
+### List config changes filtered by ruleType and changeType
+GET {{baseUrl}}/config-change?ruleType=CREDIT_LIMIT&changeType=UPDATE
+
+### List config changes filtered by time range
+GET {{baseUrl}}/config-change?from=2026-02-06T12:00:00Z&to=2026-02-06T14:00:00Z
+
+### Health check
+GET {{baseUrl}}/actuator/health
+
+### Metrics
+GET {{baseUrl}}/actuator/metrics
